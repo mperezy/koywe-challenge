@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres
+    hostname: koywe-challenge-psql
+    container_name: koywe-challenge-psql
+    restart: always
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - PGUSER=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=quotes_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/scripts:/db-scripts:rw
+      - ./db/postgres-server:/var/lib/postgresql/data:rw
