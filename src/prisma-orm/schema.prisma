@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model quote {
+  id              String   @id @db.Uuid
+  from            String
+  to              String
+  amount          Decimal  @db.Decimal
+  rate            Decimal  @db.Decimal
+  convertedAmount Decimal  @db.Decimal
+  timestamp       DateTime @db.Timestamp(6)
+  expiresAt       DateTime @db.Date
+}
