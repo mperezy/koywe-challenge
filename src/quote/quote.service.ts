@@ -1,12 +1,18 @@
 import axios, { isAxiosError } from 'axios';
+import * as dayjs from 'dayjs';
 import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '_prisma/prisma.service';
+import { QuoteInputDTO, QuoteOutputDTO } from 'models/dtos/quote.dto';
 
 @Injectable()
 export class QuoteService {
   private readonly cryptoMktAPIBaseURL: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService
+  ) {
     const CRYPTO_MKT_API_BASE_URL = this.configService.get<string>('CRYPTO_MKT_API_BASE_URL');
     const CRYPTO_MKT_API_VERSION = this.configService.get<string>('CRYPTO_MKT_API_VERSION');
     const CRYPTO_MKT_API_LAYER = this.configService.get<string>('CRYPTO_MKT_API_LAYER');
@@ -40,5 +46,26 @@ export class QuoteService {
         500
       );
     }
+  };
+
+  createQuote = async (quote: QuoteInputDTO): Promise<QuoteOutputDTO> => {
+    const _expiresAt = dayjs().add(5, 'minutes').toISOString();
+
+    const quoteCreated = await this.prismaService.quote.create({
+      data: { ...quote, expiresAt: _expiresAt },
+    });
+
+    const { id, from, to, amount, rate, convertedAmount, timestamp, expiresAt } = quoteCreated;
+
+    return {
+      id,
+      from,
+      to,
+      amount: Number(amount),
+      rate: Number(rate),
+      convertedAmount: Number(convertedAmount),
+      timestamp,
+      expiresAt,
+    };
   };
 }

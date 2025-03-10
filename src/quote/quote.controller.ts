@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { QuoteInputDTO, QuoteOutputDTO } from 'models/dtos/quote.dto';
 import { QuoteService } from 'quote/quote.service';
 
 @Controller('quote')
@@ -17,24 +18,18 @@ export class QuoteController {
     @Body('amount') amount: number,
     @Body('from') from: string,
     @Body('to') to: string
-  ) {
+  ): Promise<QuoteOutputDTO> {
     const priceRateResponse = await this.quoteService.getPriceRate(from, to);
     const rate = Number(priceRateResponse.price);
 
-    // This payload must be saved in a DB in order to get a generated ID and timestamps
-    const payload = {
+    const quoteDTO = new QuoteInputDTO({
       from,
       to,
       amount,
       rate,
       convertedAmount: amount * rate,
-    };
+    });
 
-    return {
-      id: new Date().getTime(),
-      ...payload,
-      timestamp: new Date().toISOString(),
-      expiresAt: 'TO-BE-IMPLEMENTED',
-    };
+    return await this.quoteService.createQuote(quoteDTO);
   }
 }
