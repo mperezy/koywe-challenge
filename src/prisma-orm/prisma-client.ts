@@ -1,3 +1,3 @@
-import { PrismaClient } from './generated/index.js';
+import { PrismaClient } from 'prisma-orm/generated/index.js';
 
-export default new PrismaClient();
+export default PrismaClient;
