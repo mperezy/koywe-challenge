@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { QuoteInputDTO, QuoteOutputDTO } from 'models/dtos/quote.dto';
 import { QuoteService } from 'quote/quote.service';
 
@@ -8,9 +8,12 @@ export class QuoteController {
 
   @Get('/')
   getHandler() {
-    return {
-      message: 'This is GET /quote',
-    };
+    return this.quoteService.getAllQuotes();
+  }
+
+  @Get('/:id')
+  getByIdHandler(@Param('id') id: string) {
+    return this.quoteService.getQuoteById(id);
   }
 
   @Post('/')

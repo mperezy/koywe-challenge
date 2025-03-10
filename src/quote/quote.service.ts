@@ -48,6 +48,37 @@ export class QuoteService {
     }
   };
 
+  getAllQuotes = (): Promise<QuoteOutputDTO[]> => this.prismaService.quote.findMany();
+
+  getQuoteById = async (id: string): Promise<QuoteOutputDTO> => {
+    try {
+      const now = new Date();
+
+      const quote = await this.prismaService.quote.findFirst({
+        where: {
+          id,
+          expiresAt: {
+            gte: now,
+          },
+        },
+      });
+
+      if (!quote) {
+        throw new HttpException('Not found', 404);
+      }
+
+      return quote;
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error.message && error.status) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+        throw new HttpException(error.message, error.status);
+      }
+
+      throw new HttpException(`**** Error trying to get quote with id '${id}': ${error}`, 500);
+    }
+  };
+
   createQuote = async (quote: QuoteInputDTO): Promise<QuoteOutputDTO> => {
     const _expiresAt = dayjs().add(5, 'minutes').toISOString();
 
