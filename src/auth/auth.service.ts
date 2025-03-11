@@ -1,7 +1,7 @@
+import * as crypto from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as crypto from 'node:crypto';
 
 @Injectable()
 export class AuthService {
@@ -27,4 +27,12 @@ export class AuthService {
       expiresIn: this.JWT_LIFETIME,
     });
   };
+
+  verify = (jwt: string): Promise<boolean> =>
+    this.jwtService
+      .verifyAsync(jwt, {
+        secret: this.JWT_SECRET,
+      })
+      .then(() => true)
+      .catch(() => false);
 }
