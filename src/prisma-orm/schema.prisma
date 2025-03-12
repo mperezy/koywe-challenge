@@ -18,3 +18,10 @@ model quote {
   timestamp       DateTime? @default(now()) @db.Timestamp(6)
   expiresAt       DateTime  @db.Timestamp(6)
 }
+
+model auth_session {
+  id        Int      @id @default(autoincrement())
+  username  String
+  token     String
+  expiresAt DateTime @db.Timestamp(6)
+}

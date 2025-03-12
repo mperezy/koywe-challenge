@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from 'auth/auth.service';
 
@@ -11,11 +13,13 @@ export class AuthController {
       throw new BadRequestException({ message: 'Username or password is missing.' });
     }
 
-    const jwt = await this.authService.generateJWT(username);
+    const { jwt, isNew, minutesLeft } = await this.authService.generateJWT(username);
 
     return {
       jwt,
-      message: 'This token will last ONLY for 15 minutes.',
+      message: isNew
+        ? 'This new token will last ONLY for 15 minutes.'
+        : `This token was previously created and it is still valid for ${minutesLeft === 0 ? `a few seconds` : minutesLeft === 1 ? '1 minute' : `${minutesLeft} minutes`}.`,
     };
   }
 }

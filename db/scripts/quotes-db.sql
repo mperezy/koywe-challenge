@@ -13,3 +13,10 @@ CREATE TABLE IF NOT EXISTS quotes_db.quote (
   "timestamp" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "expiresAt" TIMESTAMP NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS quotes_db.auth_session (
+  id SERIAL PRIMARY KEY,
+  username TEXT NOT NULL,
+  token TEXT NOT NULL,
+  "expiresAt" TIMESTAMP NOT NULL
+);

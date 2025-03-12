@@ -6,6 +6,7 @@ import { AuthModule } from 'auth/auth.module';
 import { AuthService } from 'auth/auth.service';
 import { AuthMiddleware } from 'middlewares/auth.middleware';
 import { QuoteModule } from 'quote/quote.module';
+import { PrismaService } from '_prisma/prisma.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { QuoteModule } from 'quote/quote.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService, PrismaService, AuthService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
