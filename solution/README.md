@@ -66,7 +66,7 @@ per username.
 ## Postman
 
 - To test this REST API I prepared the required files for a Workspace in Postman and test it.
-- Just create a new Blank workspace.
+- Just create a new blank workspace and a new collection in it.
 - Once it is created, just need to click on the top left button named **import** and select/drop all
 the files that are tracked in the folder [postman](postman).
 
