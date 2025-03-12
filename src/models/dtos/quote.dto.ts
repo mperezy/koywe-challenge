@@ -1,5 +1,6 @@
 import type { Decimal } from '@prisma/client/runtime/client.js';
 
+// Next step is to implement data validation
 export class QuoteInputDTO {
   readonly from: string;
   readonly to: string;
@@ -16,6 +17,7 @@ export class QuoteInputDTO {
   }
 }
 
+// Next step is to implement data validation
 export class QuoteOutputDTO extends QuoteInputDTO {
   readonly id: string;
   readonly timestamp: Date;
